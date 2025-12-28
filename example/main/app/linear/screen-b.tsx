@@ -6,47 +6,39 @@ export default function ScreenB() {
 	const router = useRouter();
 
 	return (
-		<Morph onBackdropPress={() => router.back()}>
-			<View style={styles.container}>
-				<Morph.Element style={styles.card}>
-					<View style={styles.cardContent}>
-						<Text style={styles.title}>Screen B</Text>
-						<Text style={styles.subtitle}>A Taller Card</Text>
-						<Text style={styles.description}>
-							This card has more content to test morphing between different
-							heights. The animation should smoothly interpolate the bounds.
-						</Text>
-						<View style={styles.buttonRow}>
-							<Pressable
-								style={styles.button}
-								onPress={() => router.push("/linear/screen-c")}
-							>
-								<Text style={styles.buttonText}>Go to C</Text>
-							</Pressable>
-							<Pressable
-								style={[styles.button, styles.buttonSecondary]}
-								onPress={() => router.back()}
-							>
-								<Text style={styles.buttonTextSecondary}>Back</Text>
-							</Pressable>
-						</View>
-					</View>
-				</Morph.Element>
+		<Morph.Element style={styles.card}>
+			<View style={styles.cardContent}>
+				<Text style={styles.title}>Screen B</Text>
+				<Text style={styles.subtitle}>A Taller Card</Text>
+				<Text style={styles.description}>
+					This card has more content to test morphing between different heights.
+					The animation should smoothly interpolate the bounds.
+				</Text>
+				<View style={styles.buttonRow}>
+					<Pressable
+						style={styles.button}
+						onPress={() => router.push("/linear/screen-c")}
+					>
+						<Text style={styles.buttonText}>Go to C</Text>
+					</Pressable>
+					<Pressable
+						style={[styles.button, styles.buttonSecondary]}
+						onPress={() => router.back()}
+					>
+						<Text style={styles.buttonTextSecondary}>Back</Text>
+					</Pressable>
+				</View>
 			</View>
-		</Morph>
+		</Morph.Element>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "flex-end",
-		padding: 16,
-		paddingBottom: 32,
-	},
 	card: {
 		borderRadius: 24,
 		overflow: "hidden",
+		marginHorizontal: 16,
+		marginBottom: 32,
 	},
 	cardContent: {
 		padding: 24,

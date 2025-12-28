@@ -6,37 +6,29 @@ export default function ScreenA() {
 	const router = useRouter();
 
 	return (
-		<Morph>
-			<View style={styles.container}>
-				<Morph.Element style={styles.card}>
-					<View style={styles.cardContent}>
-						<Text style={styles.title}>Screen A</Text>
-						<Text style={styles.description}>
-							First screen in the linear flow. Tap to navigate forward.
-						</Text>
-						<Pressable
-							style={styles.button}
-							onPress={() => router.push("/linear/screen-b")}
-						>
-							<Text style={styles.buttonText}>Go to Screen B</Text>
-						</Pressable>
-					</View>
-				</Morph.Element>
+		<Morph.Element style={styles.card}>
+			<View style={styles.cardContent}>
+				<Text style={styles.title}>Screen A</Text>
+				<Text style={styles.description}>
+					First screen in the linear flow. Tap to navigate forward.
+				</Text>
+				<Pressable
+					style={styles.button}
+					onPress={() => router.push("/linear/screen-b")}
+				>
+					<Text style={styles.buttonText}>Go to Screen B</Text>
+				</Pressable>
 			</View>
-		</Morph>
+		</Morph.Element>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "flex-end",
-		padding: 16,
-		paddingBottom: 32,
-	},
 	card: {
 		borderRadius: 24,
 		overflow: "hidden",
+		marginHorizontal: 16,
+		marginBottom: 32,
 	},
 	cardContent: {
 		padding: 24,

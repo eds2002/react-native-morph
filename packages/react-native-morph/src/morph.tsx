@@ -1,9 +1,13 @@
 import MaskedView from "@react-native-masked-view/masked-view";
-import type { ReactNode } from "react";
-import { Pressable, StyleSheet, View, type ViewStyle } from "react-native";
+import { createContext, type ReactNode, useContext } from "react";
+import { StyleSheet, View, type ViewStyle } from "react-native";
 import Animated, {
-	interpolate,
+	type SharedValue,
 	useAnimatedStyle,
+	useDerivedValue,
+	useSharedValue,
+	type WithSpringConfig,
+	withSpring,
 } from "react-native-reanimated";
 import Transition, {
 	useScreenAnimation,
@@ -11,9 +15,23 @@ import Transition, {
 
 const FLOATING_ELEMENT_TAG = "MORPH_FLOATING_ELEMENT";
 
+interface MaskBounds {
+	height: number;
+	width: number;
+	pageX: number;
+	pageY: number;
+}
+
+interface MorphContextValue {
+	targetBounds: SharedValue<MaskBounds>;
+	animatedPageY: SharedValue<number>;
+}
+
+// Context to pass bounds from Morph to MorphElement
+const MorphContext = createContext<MorphContextValue | null>(null);
+
 export interface MorphProps {
 	children: ReactNode;
-	onBackdropPress?: () => void;
 }
 
 export interface MorphElementProps {
@@ -21,56 +39,42 @@ export interface MorphElementProps {
 	style?: ViewStyle;
 }
 
-function MorphIndicator() {
-	const screenAnimation = useScreenAnimation();
+interface MorphIndicatorProps {
+	targetBounds: SharedValue<MaskBounds>;
+	animatedPageY: SharedValue<number>;
+}
+
+const TIMING_CONFIG: WithSpringConfig = {
+	mass: 3,
+	stiffness: 1000,
+	damping: 500,
+};
+
+function MorphIndicator({ targetBounds, animatedPageY }: MorphIndicatorProps) {
+	// Animated values that interpolate towards target
+	const animatedHeight = useSharedValue(0);
+	const animatedWidth = useSharedValue(0);
+	const animatedPageX = useSharedValue(0);
+
+	// React to target changes and animate towards them
+	useDerivedValue(() => {
+		const target = targetBounds.value;
+		if (target.height > 0 && target.width > 0) {
+			animatedHeight.value = withSpring(target.height, TIMING_CONFIG);
+			animatedWidth.value = withSpring(target.width, TIMING_CONFIG);
+			animatedPageX.value = withSpring(target.pageX, TIMING_CONFIG);
+			animatedPageY.value = withSpring(target.pageY, TIMING_CONFIG);
+		}
+	});
 
 	const animatedStyle = useAnimatedStyle(() => {
 		"worklet";
-		const { bounds, progress, current } = screenAnimation.value;
-		const isClosing = !!current?.closing;
-
-		const screenKey = current?.route?.key ?? "";
-		const link = bounds.getLink?.(FLOATING_ELEMENT_TAG);
-		const hasLink = !!(link?.source || link?.destination);
-
-		// ━━━ STABLE SCREEN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-		if ((progress === 1 && !isClosing) || !hasLink) {
-			const snapshot = bounds.getSnapshot?.(FLOATING_ELEMENT_TAG, screenKey);
-			const myBounds = snapshot?.bounds;
-
-			return {
-				height: myBounds?.height ?? 0,
-				width: myBounds?.width ?? 0,
-				transform: [
-					{ translateX: myBounds?.pageX ?? 0 },
-					{ translateY: myBounds?.pageY ?? 0 },
-				],
-			};
-		}
-
-		const interpolatedPageX = bounds.interpolateBounds?.(
-			FLOATING_ELEMENT_TAG,
-			"pageX",
-		);
-		const interpolatedPageY = bounds.interpolateBounds?.(
-			FLOATING_ELEMENT_TAG,
-			"pageY",
-		);
-		const interpolatedWidth = bounds.interpolateBounds?.(
-			FLOATING_ELEMENT_TAG,
-			"width",
-		);
-		const interpolatedHeight = bounds.interpolateBounds?.(
-			FLOATING_ELEMENT_TAG,
-			"height",
-		);
-
 		return {
-			height: interpolatedHeight,
-			width: interpolatedWidth,
+			height: animatedHeight.value,
+			width: animatedWidth.value,
 			transform: [
-				{ translateX: interpolatedPageX },
-				{ translateY: interpolatedPageY },
+				{ translateX: animatedPageX.value },
+				{ translateY: animatedPageY.value },
 			],
 		};
 	});
@@ -78,91 +82,101 @@ function MorphIndicator() {
 	return <Animated.View style={[styles.indicator, animatedStyle]} />;
 }
 
-export function Morph({ children, onBackdropPress }: MorphProps) {
-	const content = onBackdropPress ? (
-		<Pressable style={styles.backdrop} onPress={onBackdropPress}>
-			{children}
-		</Pressable>
-	) : (
-		children
-	);
+export function Morph({ children }: MorphProps) {
+	const targetBounds = useSharedValue<MaskBounds>({
+		height: 0,
+		width: 0,
+		pageX: 0,
+		pageY: 0,
+	});
+	const animatedPageY = useSharedValue(0);
 
 	return (
-		<MaskedView
-			style={styles.container}
-			maskElement={
-				<View style={StyleSheet.absoluteFillObject} pointerEvents="none">
-					<MorphIndicator />
-				</View>
-			}
-			pointerEvents="box-none"
-		>
-			{content}
-		</MaskedView>
+		<MorphContext.Provider value={{ targetBounds, animatedPageY }}>
+			<MaskedView
+				style={styles.container}
+				maskElement={
+					<View style={StyleSheet.absoluteFillObject} pointerEvents="none">
+						<MorphIndicator
+							targetBounds={targetBounds}
+							animatedPageY={animatedPageY}
+						/>
+					</View>
+				}
+				pointerEvents="box-none"
+			>
+				{children}
+			</MaskedView>
+		</MorphContext.Provider>
 	);
 }
 
 function MorphElement({ children, style }: MorphElementProps) {
+	const morphContext = useContext(MorphContext);
 	const screenAnimation = useScreenAnimation();
+	// Store this element's natural pageY position
+	const myNaturalPageY = useSharedValue(0);
 
-	const animatedStyle = useAnimatedStyle(() => {
-		"worklet";
-		const { bounds, progress, current, next } = screenAnimation.value;
-		const isClosing = !!current?.closing;
+	// Report snapshot bounds when this is the entering/focused screen
+	useDerivedValue(() => {
+		const { current, bounds } = screenAnimation.value;
+		const isEntering = !!current?.entering;
+		const screenKey = current?.route?.key ?? "";
 
-		const link = bounds.getLink?.(FLOATING_ELEMENT_TAG);
-		const hasLink = !!(link?.source || link?.destination);
+		const snapshot = bounds.getSnapshot?.(FLOATING_ELEMENT_TAG, screenKey);
+		const myBounds = snapshot?.bounds;
 
-		// ━━━ STABLE SCREEN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-		if ((progress === 1 && !isClosing) || !hasLink) {
-			return {
-				transform: [{ scale: 1 }, { translateY: 0 }],
-			};
+		if (myBounds && myBounds.height > 0 && myBounds.width > 0) {
+			// Always track our natural position
+			myNaturalPageY.value = myBounds.pageY;
+
+			// Update global target when entering
+			if (isEntering && morphContext) {
+				morphContext.targetBounds.value = {
+					height: myBounds.height,
+					width: myBounds.width,
+					pageX: myBounds.pageX,
+					pageY: myBounds.pageY,
+				};
+			}
 		}
+	});
 
-		// ━━━ ANIMATING SCREEN ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-		const entering = !next;
-
-		const interpolatedPageY = bounds.interpolateBounds?.(
-			FLOATING_ELEMENT_TAG,
-			"pageY",
-		);
-
-		const currentBounds = entering
-			? link?.destination?.bounds
-			: link?.source?.bounds;
-
-		const currentPageY = currentBounds?.pageY ?? 0;
-
-		const translateY = interpolatedPageY - currentPageY;
-
+	const containerStyle = useAnimatedStyle(() => {
+		const { current } = screenAnimation.value;
 		return {
-			transform: [{ translateY }],
-		};
-	}, []);
-
-	const containerOpacity = useAnimatedStyle(() => {
-		return {
-			opacity: interpolate(
-				screenAnimation.value.stackProgress,
-				[0, 1, 2, 3],
-				[0, 1, 1, 0],
-				"clamp",
-			),
-			backgroundColor: "white", // <-- we should be able to adjust this
+			opacity: current.progress,
+			backgroundColor: "white",
 			flex: 1,
 			justifyContent: "flex-end",
 		};
 	});
 
+	// Offset element to match the global animated position
+	const elementStyle = useAnimatedStyle(() => {
+		if (!morphContext) {
+			return { transform: [{ translateY: 0 }] };
+		}
+
+		const globalY = morphContext.animatedPageY.value;
+		const myY = myNaturalPageY.value;
+
+		// When globalY hasn't been set yet, don't offset
+		if (globalY === 0 || myY === 0) {
+			return { transform: [{ translateY: 0 }] };
+		}
+
+		const translateY = globalY - myY;
+		return { transform: [{ translateY }] };
+	});
+
 	return (
-		<Animated.View style={[containerOpacity]}>
-			<Transition.View
-				sharedBoundTag={FLOATING_ELEMENT_TAG}
-				style={[style, animatedStyle]}
-			>
-				<View onStartShouldSetResponder={() => true}>{children}</View>
-			</Transition.View>
+		<Animated.View style={containerStyle}>
+			<Animated.View style={elementStyle}>
+				<Transition.View sharedBoundTag={FLOATING_ELEMENT_TAG} style={style}>
+					<View onStartShouldSetResponder={() => true}>{children}</View>
+				</Transition.View>
+			</Animated.View>
 		</Animated.View>
 	);
 }

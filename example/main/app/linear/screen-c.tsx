@@ -6,46 +6,36 @@ export default function ScreenC() {
 	const router = useRouter();
 
 	return (
-		<Morph onBackdropPress={() => router.back()}>
-			<View style={styles.container}>
-				<Morph.Element style={styles.card}>
-					<View style={styles.cardContent}>
-						<Text style={styles.emoji}>🎯</Text>
-						<Text style={styles.title}>Screen C</Text>
-						<Text style={styles.description}>
-							Compact centered card layout.
-						</Text>
-						<View style={styles.buttonRow}>
-							<Pressable
-								style={styles.button}
-								onPress={() => router.push("/linear/screen-d")}
-							>
-								<Text style={styles.buttonText}>Go to D</Text>
-							</Pressable>
-							<Pressable
-								style={[styles.button, styles.buttonSecondary]}
-								onPress={() => router.back()}
-							>
-								<Text style={styles.buttonTextSecondary}>Back</Text>
-							</Pressable>
-						</View>
-					</View>
-				</Morph.Element>
+		<Morph.Element style={styles.card}>
+			<View style={styles.cardContent}>
+				<Text style={styles.emoji}>🎯</Text>
+				<Text style={styles.title}>Screen C</Text>
+				<Text style={styles.description}>Compact centered card layout.</Text>
+				<View style={styles.buttonRow}>
+					<Pressable
+						style={styles.button}
+						onPress={() => router.push("/linear/screen-d")}
+					>
+						<Text style={styles.buttonText}>Go to D</Text>
+					</Pressable>
+					<Pressable
+						style={[styles.button, styles.buttonSecondary]}
+						onPress={() => router.back()}
+					>
+						<Text style={styles.buttonTextSecondary}>Back</Text>
+					</Pressable>
+				</View>
 			</View>
-		</Morph>
+		</Morph.Element>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "flex-end",
-		padding: 16,
-		paddingBottom: 32,
-	},
 	card: {
 		borderRadius: 24,
 		overflow: "hidden",
+		marginHorizontal: 16,
+		marginBottom: 32,
 	},
 	cardContent: {
 		padding: 32,

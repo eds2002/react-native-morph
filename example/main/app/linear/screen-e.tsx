@@ -6,43 +6,35 @@ export default function ScreenE() {
 	const router = useRouter();
 
 	return (
-		<Morph onBackdropPress={() => router.back()}>
-			<View style={styles.container}>
-				<Morph.Element style={styles.card}>
-					<View style={styles.cardContent}>
-						<Text style={styles.emoji}>🎉</Text>
-						<Text style={styles.title}>Screen E</Text>
-						<Text style={styles.subtitle}>Final Screen!</Text>
-						<Text style={styles.description}>
-							You&apos;ve reached the end of the linear flow. The morph
-							animation should work smoothly going back through all screens.
-						</Text>
-						<Pressable style={styles.button} onPress={() => router.back()}>
-							<Text style={styles.buttonText}>Go Back</Text>
-						</Pressable>
-						<Pressable
-							style={styles.buttonOutline}
-							onPress={() => router.dismissAll()}
-						>
-							<Text style={styles.buttonOutlineText}>Dismiss All</Text>
-						</Pressable>
-					</View>
-				</Morph.Element>
+		<Morph.Element style={styles.card}>
+			<View style={styles.cardContent}>
+				<Text style={styles.emoji}>🎉</Text>
+				<Text style={styles.title}>Screen E</Text>
+				<Text style={styles.subtitle}>Final Screen!</Text>
+				<Text style={styles.description}>
+					You've reached the end of the linear flow. The morph animation should
+					work smoothly going back through all screens.
+				</Text>
+				<Pressable style={styles.button} onPress={() => router.back()}>
+					<Text style={styles.buttonText}>Go Back</Text>
+				</Pressable>
+				<Pressable
+					style={styles.buttonOutline}
+					onPress={() => router.dismissAll()}
+				>
+					<Text style={styles.buttonOutlineText}>Dismiss All</Text>
+				</Pressable>
 			</View>
-		</Morph>
+		</Morph.Element>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: "flex-end",
-		padding: 16,
-		paddingBottom: 32,
-	},
 	card: {
 		borderRadius: 24,
 		overflow: "hidden",
+		marginHorizontal: 16,
+		marginBottom: 32,
 	},
 	cardContent: {
 		padding: 32,
