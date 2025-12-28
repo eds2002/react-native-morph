@@ -1,0 +1,23 @@
+# OSX
+.DS_Store
+
+# Node
+node_modules/
+bun.lock
+
+# Build
+lib/
+dist/
+
+# Expo
+.expo/
+
+# IDE
+.idea/
+.vscode/
+
+# Turborepo
+.turbo/
+
+# Misc
+*.log
