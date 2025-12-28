@@ -1,3 +1,2 @@
-export function hello(name: string): string {
-  return `Hello, ${name}!`;
-}
+export type { MorphElementProps, MorphProps } from "./morph";
+export { Morph } from "./morph";
