@@ -2,6 +2,7 @@ import MaskedView from "@react-native-masked-view/masked-view";
 import { createContext, type ReactNode, useContext } from "react";
 import { StyleSheet, View, type ViewStyle } from "react-native";
 import Animated, {
+	interpolate,
 	type SharedValue,
 	useAnimatedReaction,
 	useAnimatedStyle,
@@ -110,32 +111,31 @@ function MorphElement({ children, style }: MorphElementProps) {
 			}
 			const currentKey = current?.route?.key ?? "";
 
-			// Use previous route key as target (available during gesture, unlike history)
 			const targetKey = previous?.route?.key ?? historyTargetKey;
 
-			if (!morphContext || !targetKey) return;
+			if (!morphContext || !targetKey) {
+				return;
+			}
 
-			// Get snapshots directly
 			const currentSnapshot = bounds.getSnapshot?.(
 				FLOATING_ELEMENT_TAG,
 				currentKey,
 			);
+
 			const targetSnapshot = bounds.getSnapshot?.(
 				FLOATING_ELEMENT_TAG,
 				targetKey,
 			);
 
-			if (!currentSnapshot?.bounds || !targetSnapshot?.bounds) return;
+			if (!currentSnapshot?.bounds || !targetSnapshot?.bounds) {
+				return;
+			}
 
-			// Interpolate using current.progress directly (works with gestures)
-			// Progress 1 = current screen active, Progress 0 = dismissed to target
 			const height = bounds.interpolateBounds(
 				FLOATING_ELEMENT_TAG,
 				"height",
 				targetKey,
 			);
-
-			console.log(height);
 
 			const width = bounds.interpolateBounds(
 				FLOATING_ELEMENT_TAG,
@@ -165,16 +165,63 @@ function MorphElement({ children, style }: MorphElementProps) {
 	);
 
 	const containerStyle = useAnimatedStyle(() => {
+		const { progress } = screenAnimation.value;
 		return {
+			opacity: interpolate(progress, [0.25, 0.75], [0, 1], "clamp"),
 			backgroundColor: "white",
 			flex: 1,
 			justifyContent: "flex-end",
 		};
 	});
 
+	const elementStyle = useAnimatedStyle(() => {
+		const { current, previous, next, bounds, progress } = screenAnimation.value;
+		const currentKey = current?.route?.key ?? "";
+
+		// For entering (0→1): target is where we came from (previous)
+		// For exiting (1→2): target is where we're going (next)
+		const isExiting = progress > 1;
+		const targetKey = isExiting
+			? (next?.route?.key ?? historyTargetKey)
+			: (previous?.route?.key ?? historyTargetKey);
+
+		if (!targetKey) {
+			return { transform: [{ translateY: 0 }] };
+		}
+
+		const currentSnapshot = bounds.getSnapshot?.(
+			FLOATING_ELEMENT_TAG,
+			currentKey,
+		);
+		const targetSnapshot = bounds.getSnapshot?.(
+			FLOATING_ELEMENT_TAG,
+			targetKey,
+		);
+
+		if (!currentSnapshot?.bounds || !targetSnapshot?.bounds) {
+			return { transform: [{ translateY: 0 }] };
+		}
+
+		// Offset from current natural position to target position
+		const offset = targetSnapshot.bounds.pageY - currentSnapshot.bounds.pageY;
+
+		// progress 0→1: entering screen (offset → 0)
+		// progress 1→2: exiting screen (0 → offset)
+		const translateY = interpolate(
+			progress,
+			[0, 1, 2],
+			[offset, 0, offset],
+			"clamp",
+		);
+
+		return {
+			transform: [{ translateY }],
+		};
+	});
+
 	return (
 		<Animated.View style={containerStyle}>
-			<Animated.View>
+			<Animated.View style={elementStyle}>
 				<Transition.View sharedBoundTag={FLOATING_ELEMENT_TAG} style={style}>
 					<Animated.View>
 						<View onStartShouldSetResponder={() => true}>{children}</View>

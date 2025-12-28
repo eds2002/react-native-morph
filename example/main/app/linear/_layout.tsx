@@ -1,25 +1,33 @@
 import "react-native-reanimated";
-import { useRouter } from "expo-router";
 import { View } from "react-native";
 import { Morph } from "react-native-morph";
-import Transition from "react-native-screen-transitions";
 import { BlankStack } from "@/layouts/blank-stack";
 
 const options = {
 	gestureEnabled: true,
 	gestureDirection: "vertical",
 	transitionSpec: {
-		open: Transition.Specs.DefaultSpec,
-		close: Transition.Specs.DefaultSpec,
+		open: {
+			stiffness: 1000,
+			damping: 500,
+			mass: 5,
+			overshootClamping: true,
+			restSpeedThreshold: 0.02,
+		},
+		close: {
+			stiffness: 1000,
+			damping: 500,
+			mass: 5,
+			overshootClamping: true,
+			restSpeedThreshold: 0.02,
+		},
 	},
 } as const;
 
 export default function LinearLayout() {
-	const router = useRouter();
-
 	return (
 		<View style={{ flex: 1, backgroundColor: "red" }}>
-			<Morph onBackdropPress={() => router.back()}>
+			<Morph>
 				<BlankStack screenOptions={{}}>
 					<BlankStack.Screen name="index" options={options} />
 					<BlankStack.Screen name="screen-b" options={options} />
