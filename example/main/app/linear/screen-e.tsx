@@ -14,8 +14,8 @@ export default function ScreenE() {
 						<Text style={styles.title}>Screen E</Text>
 						<Text style={styles.subtitle}>Final Screen!</Text>
 						<Text style={styles.description}>
-							You've reached the end of the linear flow. The morph animation
-							should work smoothly going back through all screens.
+							You&apos;ve reached the end of the linear flow. The morph
+							animation should work smoothly going back through all screens.
 						</Text>
 						<Pressable style={styles.button} onPress={() => router.back()}>
 							<Text style={styles.buttonText}>Go Back</Text>
