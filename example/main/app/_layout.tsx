@@ -1,5 +1,4 @@
 import "react-native-reanimated";
-import { Stack } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BlankStack } from "@/layouts/blank-stack";
 
