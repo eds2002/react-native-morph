@@ -2,6 +2,8 @@ import MaskedView from "@react-native-masked-view/masked-view";
 import { createContext, type ReactNode, useContext } from "react";
 import { StyleSheet, View, type ViewStyle } from "react-native";
 import Animated, {
+	Extrapolation,
+	interpolate,
 	type SharedValue,
 	useAnimatedStyle,
 	useDerivedValue,
@@ -144,8 +146,15 @@ function MorphElement({ children, style }: MorphElementProps) {
 
 	const containerStyle = useAnimatedStyle(() => {
 		const { current } = screenAnimation.value;
+
+		const opacity = interpolate(
+			current.progress,
+			[0, 0.4, 1, 1.6, 2],
+			[0, 1, 1, 1, 0],
+			Extrapolation.CLAMP,
+		);
 		return {
-			opacity: current.progress,
+			opacity,
 			backgroundColor: "white",
 			flex: 1,
 			justifyContent: "flex-end",
@@ -170,11 +179,29 @@ function MorphElement({ children, style }: MorphElementProps) {
 		return { transform: [{ translateY }] };
 	});
 
+	// Scale applied to content inside Transition.View so it doesn't affect bounds
+	const contentStyle = useAnimatedStyle(() => {
+		const { current } = screenAnimation.value;
+		const progress = current.progress;
+
+		// Scale: 0->1 = 0.98->1 (entering), 1->2 = 1->1.02 (exiting)
+		const scale = interpolate(
+			progress,
+			[0, 0.4, 1, 1.6, 2],
+			[0.95, 1, 1, 1.05, 1.05],
+			Extrapolation.CLAMP,
+		);
+
+		return { transform: [{ scale }] };
+	});
+
 	return (
 		<Animated.View style={containerStyle}>
 			<Animated.View style={elementStyle}>
 				<Transition.View sharedBoundTag={FLOATING_ELEMENT_TAG} style={style}>
-					<View onStartShouldSetResponder={() => true}>{children}</View>
+					<Animated.View style={contentStyle}>
+						<View onStartShouldSetResponder={() => true}>{children}</View>
+					</Animated.View>
 				</Transition.View>
 			</Animated.View>
 		</Animated.View>
@@ -192,6 +219,6 @@ const styles = StyleSheet.create({
 	},
 	indicator: {
 		backgroundColor: "white",
-		borderRadius: 24,
+		borderRadius: 36,
 	},
 });
