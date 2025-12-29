@@ -28,12 +28,16 @@
 		]
 	},
 	"release-it": {
+		"hooks": {
+			"after:bump": "npm version ${version} --no-git-tag-version --workspaces"
+		},
 		"git": {
 			"commitMessage": "chore: release ${version}",
 			"tagName": "v${version}"
 		},
 		"npm": {
-			"publish": true
+			"publish": true,
+			"publishPath": "./packages/react-native-morph"
 		},
 		"github": {
 			"release": true,
