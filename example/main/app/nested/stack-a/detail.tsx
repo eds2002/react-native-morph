@@ -2,21 +2,25 @@ import { useRouter } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Morph } from "react-native-morph";
 
-export default function ScreenC() {
+export default function StackADetail() {
 	const router = useRouter();
 
 	return (
 		<Morph.Element style={styles.card}>
 			<View style={styles.cardContent}>
-				<Text style={styles.emoji}>🎯</Text>
-				<Text style={styles.title}>Screen C</Text>
-				<Text style={styles.description}>Compact centered card layout.</Text>
+				<Text style={styles.emoji}>2️⃣</Text>
+				<Text style={styles.title}>Stack A - Detail</Text>
+				<Text style={styles.description}>
+					Second level in the nested stack. Card is taller to test height
+					morphing.
+				</Text>
+				<View style={styles.spacer} />
 				<View style={styles.buttonRow}>
 					<Pressable
 						style={styles.button}
-						onPress={() => router.push("/linear/screen-d")}
+						onPress={() => router.push("/nested/stack-a/deep")}
 					>
-						<Text style={styles.buttonText}>Go to D</Text>
+						<Text style={styles.buttonText}>Go Deeper</Text>
 					</Pressable>
 					<Pressable
 						style={[styles.button, styles.buttonSecondary]}
@@ -34,11 +38,13 @@ const styles = StyleSheet.create({
 	card: {
 		borderRadius: 24,
 		overflow: "hidden",
-		height: 600,
+		marginHorizontal: 16,
+		marginBottom: 32,
 	},
 	cardContent: {
-		padding: 32,
+		padding: 24,
 		alignItems: "center",
+		minHeight: 300,
 	},
 	emoji: {
 		fontSize: 48,
@@ -47,7 +53,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 24,
 		fontWeight: "700",
-		marginBottom: 8,
+		marginBottom: 12,
 		textAlign: "center",
 	},
 	description: {
@@ -55,14 +61,19 @@ const styles = StyleSheet.create({
 		color: "#666",
 		marginBottom: 24,
 		textAlign: "center",
+		lineHeight: 24,
+	},
+	spacer: {
+		flex: 1,
 	},
 	buttonRow: {
 		flexDirection: "row",
 		gap: 12,
+		width: "100%",
 	},
 	button: {
 		flex: 1,
-		backgroundColor: "#007AFF",
+		backgroundColor: "#14B8A6",
 		padding: 16,
 		borderRadius: 12,
 		alignItems: "center",

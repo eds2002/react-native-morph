@@ -24,16 +24,13 @@ const options = {
 	},
 } as const;
 
-export default function LinearLayout() {
+export default function NestedLayout() {
 	return (
-		<View style={{ flex: 1, backgroundColor: "red" }}>
+		<View style={{ flex: 1, backgroundColor: "purple" }}>
 			<Morph>
-				<BlankStack screenOptions={{}}>
+				<BlankStack>
 					<BlankStack.Screen name="index" options={options} />
-					<BlankStack.Screen name="screen-b" options={options} />
-					<BlankStack.Screen name="screen-c" options={options} />
-					<BlankStack.Screen name="screen-d" options={options} />
-					<BlankStack.Screen name="screen-e" options={options} />
+					<BlankStack.Screen name="stack-a" options={options} />
 				</BlankStack>
 			</Morph>
 		</View>

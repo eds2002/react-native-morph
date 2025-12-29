@@ -170,7 +170,6 @@ function MorphElement({ children, style }: MorphElementProps) {
 			opacity: interpolate(progress, [0.25, 0.75], [0, 1], "clamp"),
 			backgroundColor: "white",
 			flex: 1,
-			justifyContent: "flex-end",
 		};
 	});
 
@@ -221,11 +220,12 @@ function MorphElement({ children, style }: MorphElementProps) {
 
 	return (
 		<Animated.View style={containerStyle}>
-			<Animated.View style={elementStyle}>
-				<Transition.View sharedBoundTag={FLOATING_ELEMENT_TAG} style={style}>
-					<Animated.View>
-						<View onStartShouldSetResponder={() => true}>{children}</View>
-					</Animated.View>
+			<Animated.View style={[styles.elementWrapper, elementStyle]}>
+				<Transition.View
+					sharedBoundTag={FLOATING_ELEMENT_TAG}
+					style={[{ marginTop: "auto" }, style]}
+				>
+					{children}
 				</Transition.View>
 			</Animated.View>
 		</Animated.View>
@@ -236,6 +236,9 @@ Morph.Element = MorphElement;
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
+	},
+	elementWrapper: {
 		flex: 1,
 	},
 	backdrop: {

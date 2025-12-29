@@ -24,16 +24,14 @@ const options = {
 	},
 } as const;
 
-export default function LinearLayout() {
+export default function OnboardingLayout() {
 	return (
-		<View style={{ flex: 1, backgroundColor: "red" }}>
+		<View style={{ flex: 1, backgroundColor: "#1a1a2e" }}>
 			<Morph>
 				<BlankStack screenOptions={{}}>
 					<BlankStack.Screen name="index" options={options} />
-					<BlankStack.Screen name="screen-b" options={options} />
-					<BlankStack.Screen name="screen-c" options={options} />
-					<BlankStack.Screen name="screen-d" options={options} />
-					<BlankStack.Screen name="screen-e" options={options} />
+					<BlankStack.Screen name="steps" options={options} />
+					<BlankStack.Screen name="complete" options={options} />
 				</BlankStack>
 			</Morph>
 		</View>
