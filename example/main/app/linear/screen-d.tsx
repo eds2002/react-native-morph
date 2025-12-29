@@ -7,7 +7,7 @@ export default function ScreenD() {
 	const router = useRouter();
 
 	return (
-		<Morph.Element style={styles.card}>
+		<Morph.Masked style={styles.card}>
 			<View style={styles.cardContent}>
 				<Text style={styles.title}>Screen D</Text>
 				<Text style={styles.description}>
@@ -46,7 +46,7 @@ export default function ScreenD() {
 					/>
 				</View>
 			</View>
-		</Morph.Element>
+		</Morph.Masked>
 	);
 }
 

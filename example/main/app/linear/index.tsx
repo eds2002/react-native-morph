@@ -7,7 +7,7 @@ export default function ScreenA() {
 	const router = useRouter();
 
 	return (
-		<Morph.Element style={styles.card}>
+		<Morph.Masked style={styles.card}>
 			<View style={styles.cardContent}>
 				<Text style={styles.title}>Screen A</Text>
 				<Text style={styles.description}>
@@ -18,7 +18,7 @@ export default function ScreenA() {
 					onPress={() => router.push("/linear/screen-b")}
 				/>
 			</View>
-		</Morph.Element>
+		</Morph.Masked>
 	);
 }
 

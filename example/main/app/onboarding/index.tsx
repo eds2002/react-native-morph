@@ -7,7 +7,7 @@ export default function OnboardingWelcome() {
 	const router = useRouter();
 
 	return (
-		<Morph.Element style={styles.card}>
+		<Morph.Masked style={styles.card}>
 			<View style={styles.cardContent}>
 				<Text style={styles.emoji}>👋</Text>
 				<Text style={styles.title}>Welcome!</Text>
@@ -19,7 +19,7 @@ export default function OnboardingWelcome() {
 					onPress={() => router.push("/onboarding/steps")}
 				/>
 			</View>
-		</Morph.Element>
+		</Morph.Masked>
 	);
 }
 

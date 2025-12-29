@@ -7,7 +7,7 @@ export default function ScreenC() {
 	const router = useRouter();
 
 	return (
-		<Morph.Element style={styles.card}>
+		<Morph.Masked style={styles.card}>
 			<View style={styles.cardContent}>
 				<Text style={styles.emoji}>🎯</Text>
 				<Text style={styles.title}>Screen C</Text>
@@ -26,7 +26,7 @@ export default function ScreenC() {
 					/>
 				</View>
 			</View>
-		</Morph.Element>
+		</Morph.Masked>
 	);
 }
 

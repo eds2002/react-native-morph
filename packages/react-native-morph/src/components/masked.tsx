@@ -1,100 +1,19 @@
-import MaskedView from "@react-native-masked-view/masked-view";
-import { createContext, type ReactNode, useContext } from "react";
-import { StyleSheet, View, type ViewStyle } from "react-native";
+import { useContext } from "react";
+import { StyleSheet } from "react-native";
 import Animated, {
 	interpolate,
-	type SharedValue,
 	useAnimatedReaction,
 	useAnimatedStyle,
-	useSharedValue,
 } from "react-native-reanimated";
 import Transition, {
 	useHistory,
 	useScreenAnimation,
 } from "react-native-screen-transitions";
+import { FLOATING_ELEMENT_TAG } from "../constants";
+import { MorphContext } from "../context";
+import type { MorphMaskedProps } from "../types";
 
-const FLOATING_ELEMENT_TAG = "MORPH_FLOATING_ELEMENT";
-
-const INITIAL_MASK_BOUNDS = {
-	height: 0,
-	width: 0,
-	pageX: 0,
-	pageY: 0,
-};
-
-interface MaskBounds {
-	height: number;
-	width: number;
-	pageX: number;
-	pageY: number;
-}
-
-interface MorphContextValue {
-	targetBounds: SharedValue<MaskBounds>;
-}
-
-const MorphContext = createContext<MorphContextValue | null>(null);
-
-interface MorphProps {
-	children: ReactNode;
-}
-
-interface MorphElementProps {
-	children: ReactNode;
-	style?: ViewStyle;
-}
-
-interface MorphIndicatorProps {
-	targetBounds: SharedValue<MaskBounds>;
-}
-
-function MorphIndicator({ targetBounds }: MorphIndicatorProps) {
-	const animatedStyle = useAnimatedStyle(() => {
-		"worklet";
-		const target = targetBounds.value;
-
-		if (target.height > 0 && target.width > 0) {
-			return {
-				height: target.height,
-				width: target.width,
-				transform: [{ translateX: target.pageX }, { translateY: target.pageY }],
-			};
-		}
-
-		return {
-			height: targetBounds.value.height,
-			width: targetBounds.value.width,
-			transform: [
-				{ translateX: targetBounds.value.pageX },
-				{ translateY: targetBounds.value.pageY },
-			],
-		};
-	});
-
-	return <Animated.View style={[styles.indicator, animatedStyle]} />;
-}
-
-export function Morph({ children }: MorphProps) {
-	const targetBounds = useSharedValue<MaskBounds>(INITIAL_MASK_BOUNDS);
-
-	return (
-		<MorphContext.Provider value={{ targetBounds }}>
-			<MaskedView
-				style={styles.container}
-				maskElement={
-					<View style={StyleSheet.absoluteFillObject} pointerEvents="none">
-						<MorphIndicator targetBounds={targetBounds} />
-					</View>
-				}
-				pointerEvents="box-none"
-			>
-				{children}
-			</MaskedView>
-		</MorphContext.Provider>
-	);
-}
-
-function MorphElement({ children, style }: MorphElementProps) {
+export function MorphMasked({ children, style }: MorphMaskedProps) {
 	const morphContext = useContext(MorphContext);
 	const screenAnimation = useScreenAnimation();
 	const { getMostRecent } = useHistory();
@@ -110,7 +29,6 @@ function MorphElement({ children, style }: MorphElementProps) {
 				return;
 			}
 			const currentKey = current?.route?.key ?? "";
-
 			const targetKey = previous?.route?.key ?? historyTargetKey;
 
 			if (!morphContext || !targetKey) {
@@ -190,11 +108,8 @@ function MorphElement({ children, style }: MorphElementProps) {
 			return { transform: [{ translateY: 0 }] };
 		}
 
-		// Use the exact same pageY that the mask indicator uses
 		const maskPageY = morphContext.targetBounds.value.pageY;
 		const contentNaturalY = currentSnapshot.bounds.pageY;
-
-		// Move content to align with where the mask is
 		const translateY = maskPageY - contentNaturalY;
 
 		return {
@@ -216,20 +131,8 @@ function MorphElement({ children, style }: MorphElementProps) {
 	);
 }
 
-Morph.Element = MorphElement;
-
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
 	elementWrapper: {
 		flex: 1,
-	},
-	backdrop: {
-		flex: 1,
-	},
-	indicator: {
-		backgroundColor: "white",
-		borderRadius: 36,
 	},
 });
