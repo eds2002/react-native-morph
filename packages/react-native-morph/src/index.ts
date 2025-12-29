@@ -1,2 +1,2 @@
 export { Morph } from "./components/morph";
-export type { MaskBounds, MorphMaskedProps, MorphProps } from "./types";
+export type { MaskBounds, MorphProps, MorphScreenProps } from "./types";

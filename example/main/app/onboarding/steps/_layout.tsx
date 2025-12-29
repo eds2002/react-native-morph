@@ -6,7 +6,7 @@ export default function StepsLayout() {
 	const { height } = useWindowDimensions();
 
 	return (
-		<Morph.Masked style={{ flex: 1, height }}>
+		<Morph.Screen style={{ flex: 1, height }}>
 			<Stack
 				screenOptions={{
 					headerShown: false,
@@ -17,6 +17,6 @@ export default function StepsLayout() {
 				<Stack.Screen name="step-2" />
 				<Stack.Screen name="step-3" />
 			</Stack>
-		</Morph.Masked>
+		</Morph.Screen>
 	);
 }

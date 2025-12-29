@@ -5,7 +5,7 @@ import { INITIAL_MASK_BOUNDS } from "../constants";
 import { MorphContext } from "../context";
 import type { MaskBounds, MorphProps } from "../types";
 import { MorphIndicator } from "./indicator";
-import { MorphMasked } from "./masked";
+import { MorphScreen } from "./screen";
 
 const DEFAULT_BORDER_RADIUS = 36;
 const DEFAULT_BACKGROUND_COLOR = "white";
@@ -48,7 +48,7 @@ function MorphRoot({
 }
 
 export const Morph = Object.assign(MorphRoot, {
-	Masked: MorphMasked,
+	Screen: MorphScreen,
 });
 
 const styles = StyleSheet.create({

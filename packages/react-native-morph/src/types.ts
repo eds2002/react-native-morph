@@ -24,7 +24,7 @@ export interface MorphProps {
 	onBackdropPress?: () => void;
 }
 
-export interface MorphMaskedProps {
+export interface MorphScreenProps {
 	children: ReactNode;
 	style?: ViewStyle;
 }

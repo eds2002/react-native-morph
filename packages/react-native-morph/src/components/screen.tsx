@@ -11,9 +11,9 @@ import Transition, {
 } from "react-native-screen-transitions";
 import { FLOATING_ELEMENT_TAG } from "../constants";
 import { useMorphContext } from "../context";
-import type { MorphMaskedProps } from "../types";
+import type { MorphScreenProps } from "../types";
 
-export function MorphMasked({ children, style }: MorphMaskedProps) {
+export function MorphScreen({ children, style }: MorphScreenProps) {
 	const { backgroundColor, scaleFactor, targetBounds } = useMorphContext();
 	const screenAnimation = useScreenAnimation();
 	const { getMostRecent } = useHistory();

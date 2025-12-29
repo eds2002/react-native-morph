@@ -7,7 +7,7 @@ export default function OnboardingComplete() {
 	const router = useRouter();
 
 	return (
-		<Morph.Masked style={styles.card}>
+		<Morph.Screen style={styles.card}>
 			<View style={styles.cardContent}>
 				<Text style={styles.emoji}>🎉</Text>
 				<Text style={styles.title}>All Done!</Text>
@@ -16,7 +16,7 @@ export default function OnboardingComplete() {
 				</Text>
 				<Button title="Let's Go" onPress={() => router.dismissTo("/")} />
 			</View>
-		</Morph.Masked>
+		</Morph.Screen>
 	);
 }
 

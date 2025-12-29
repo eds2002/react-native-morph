@@ -7,7 +7,7 @@ export default function ScreenE() {
 	const router = useRouter();
 
 	return (
-		<Morph.Masked style={styles.card}>
+		<Morph.Screen style={styles.card}>
 			<View style={styles.cardContent}>
 				<Text style={styles.emoji}>🎉</Text>
 				<Text style={styles.title}>Screen E</Text>
@@ -28,7 +28,7 @@ export default function ScreenE() {
 					style={styles.fullWidth}
 				/>
 			</View>
-		</Morph.Masked>
+		</Morph.Screen>
 	);
 }
 

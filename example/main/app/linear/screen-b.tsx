@@ -7,7 +7,7 @@ export default function ScreenB() {
 	const router = useRouter();
 
 	return (
-		<Morph.Masked style={styles.card}>
+		<Morph.Screen style={styles.card}>
 			<View style={styles.cardContent}>
 				<Text style={styles.title}>Screen B</Text>
 				<Text style={styles.subtitle}>A Taller Card</Text>
@@ -29,7 +29,7 @@ export default function ScreenB() {
 					/>
 				</View>
 			</View>
-		</Morph.Masked>
+		</Morph.Screen>
 	);
 }
 

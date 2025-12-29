@@ -27,9 +27,9 @@ import { Morph } from 'react-native-morph';
 </Morph>
 
 // Mark elements that should morph
-<Morph.Masked style={{ height: 300 }}>
+<Morph.Screen style={{ height: 300 }}>
   <YourContent />
-</Morph.Masked>
+</Morph.Screen>
 ```
 
 ## Dependencies
