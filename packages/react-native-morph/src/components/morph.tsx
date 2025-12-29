@@ -7,16 +7,24 @@ import type { MaskBounds, MorphProps } from "../types";
 import { MorphIndicator } from "./indicator";
 import { MorphMasked } from "./masked";
 
-function MorphRoot({ children }: MorphProps) {
+const DEFAULT_BORDER_RADIUS = 36;
+
+function MorphRoot({
+	children,
+	borderRadius = DEFAULT_BORDER_RADIUS,
+}: MorphProps) {
 	const targetBounds = useSharedValue<MaskBounds>(INITIAL_MASK_BOUNDS);
 
 	return (
-		<MorphContext.Provider value={{ targetBounds }}>
+		<MorphContext.Provider value={{ targetBounds, borderRadius }}>
 			<MaskedView
 				style={styles.container}
 				maskElement={
 					<View style={StyleSheet.absoluteFillObject} pointerEvents="none">
-						<MorphIndicator targetBounds={targetBounds} />
+						<MorphIndicator
+							targetBounds={targetBounds}
+							borderRadius={borderRadius}
+						/>
 					</View>
 				}
 				pointerEvents="box-none"

@@ -1,8 +1,10 @@
-import { StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
 import type { MorphIndicatorProps } from "../types";
 
-export function MorphIndicator({ targetBounds }: MorphIndicatorProps) {
+export function MorphIndicator({
+	targetBounds,
+	borderRadius,
+}: MorphIndicatorProps) {
 	const animatedStyle = useAnimatedStyle(() => {
 		"worklet";
 		const target = targetBounds.value;
@@ -14,12 +16,9 @@ export function MorphIndicator({ targetBounds }: MorphIndicatorProps) {
 		};
 	});
 
-	return <Animated.View style={[styles.indicator, animatedStyle]} />;
+	return (
+		<Animated.View
+			style={[{ backgroundColor: "white", borderRadius }, animatedStyle]}
+		/>
+	);
 }
-
-const styles = StyleSheet.create({
-	indicator: {
-		backgroundColor: "white",
-		borderRadius: 36,
-	},
-});

@@ -11,10 +11,12 @@ export interface MaskBounds {
 
 export interface MorphContextValue {
 	targetBounds: SharedValue<MaskBounds>;
+	borderRadius: number;
 }
 
 export interface MorphProps {
 	children: ReactNode;
+	borderRadius?: number;
 }
 
 export interface MorphMaskedProps {
@@ -24,4 +26,5 @@ export interface MorphMaskedProps {
 
 export interface MorphIndicatorProps {
 	targetBounds: SharedValue<MaskBounds>;
+	borderRadius: number;
 }
