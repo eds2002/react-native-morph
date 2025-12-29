@@ -29,7 +29,7 @@
 	},
 	"release-it": {
 		"hooks": {
-			"after:bump": "npm version ${version} --no-git-tag-version --workspaces"
+			"after:bump": "cd packages/react-native-morph && npm version ${version} --no-git-tag-version"
 		},
 		"git": {
 			"commitMessage": "chore: release ${version}",
