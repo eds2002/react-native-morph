@@ -1,17 +1,14 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.3.5/schema.json",
-  "files": {
-    "includes": ["**", "!node_modules"],
-    "ignoreUnknown": true
-  },
-  "linter": {
-    "rules": {
-      "suspicious": {
-        "noExplicitAny": "off"
-      },
-      "complexity": {
-        "noBannedTypes": "off"
-      }
-    }
-  }
+	"$schema": "https://biomejs.dev/schemas/2.3.5/schema.json",
+	"files": {
+		"includes": [
+			"**",
+			"!**/node_modules",
+			"!**/.expo",
+			"!**/lib",
+			"!**/build",
+			"!**/dist"
+		],
+		"ignoreUnknown": true
+	}
 }

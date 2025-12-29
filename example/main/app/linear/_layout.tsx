@@ -1,5 +1,4 @@
 import "react-native-reanimated";
-import { View } from "react-native";
 import { Morph } from "react-native-morph";
 import { BlankStack } from "@/layouts/blank-stack";
 
