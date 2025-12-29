@@ -26,7 +26,7 @@ const options = {
 
 export default function OnboardingLayout() {
 	return (
-		<View style={{ flex: 1, backgroundColor: "#1a1a2e" }}>
+		<View style={{ flex: 1 }}>
 			<Morph>
 				<BlankStack screenOptions={{}}>
 					<BlankStack.Screen name="index" options={options} />

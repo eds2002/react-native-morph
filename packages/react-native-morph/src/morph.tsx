@@ -174,17 +174,10 @@ function MorphElement({ children, style }: MorphElementProps) {
 	});
 
 	const elementStyle = useAnimatedStyle(() => {
-		const { current, previous, next, bounds, progress } = screenAnimation.value;
+		const { current, bounds } = screenAnimation.value;
 		const currentKey = current?.route?.key ?? "";
 
-		// For entering (0→1): target is where we came from (previous)
-		// For exiting (1→2): target is where we're going (next)
-		const isExiting = progress > 1;
-		const targetKey = isExiting
-			? (next?.route?.key ?? historyTargetKey)
-			: (previous?.route?.key ?? historyTargetKey);
-
-		if (!targetKey) {
+		if (!morphContext) {
 			return { transform: [{ translateY: 0 }] };
 		}
 
@@ -192,26 +185,17 @@ function MorphElement({ children, style }: MorphElementProps) {
 			FLOATING_ELEMENT_TAG,
 			currentKey,
 		);
-		const targetSnapshot = bounds.getSnapshot?.(
-			FLOATING_ELEMENT_TAG,
-			targetKey,
-		);
 
-		if (!currentSnapshot?.bounds || !targetSnapshot?.bounds) {
+		if (!currentSnapshot?.bounds) {
 			return { transform: [{ translateY: 0 }] };
 		}
 
-		// Offset from current natural position to target position
-		const offset = targetSnapshot.bounds.pageY - currentSnapshot.bounds.pageY;
+		// Use the exact same pageY that the mask indicator uses
+		const maskPageY = morphContext.targetBounds.value.pageY;
+		const contentNaturalY = currentSnapshot.bounds.pageY;
 
-		// progress 0→1: entering screen (offset → 0)
-		// progress 1→2: exiting screen (0 → offset)
-		const translateY = interpolate(
-			progress,
-			[0, 1, 2],
-			[offset, 0, offset],
-			"clamp",
-		);
+		// Move content to align with where the mask is
+		const translateY = maskPageY - contentNaturalY;
 
 		return {
 			transform: [{ translateY }],
