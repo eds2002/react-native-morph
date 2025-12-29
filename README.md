@@ -1,27 +1,42 @@
 # react-native-morph
 
-A React Native library
+> **Work in Progress** - A React Native library for creating smooth morphing transitions between screens, inspired by the [Family](https://family.co) wallet app.
+
+## Features
+
+- Auto morphing between screens with shared element transitions
+- Works with React Navigation and Expo Router
+- Minimal dependencies
 
 ## Installation
 
 ```bash
-bun add react-native-morph
+bun add react-native-morph react-native-screen-transitions @react-native-masked-view/masked-view
 ```
 
 ## Usage
 
 ```tsx
-import { } from 'react-native-morph';
+import { Morph } from 'react-native-morph';
+
+// Wrap your navigator with Morph
+<Morph borderRadius={24}>
+  <Stack.Navigator>
+    ...
+  </Stack.Navigator>
+</Morph>
+
+// Mark elements that should morph
+<Morph.Masked style={{ height: 300 }}>
+  <YourContent />
+</Morph.Masked>
 ```
 
-## Contributing
+## Dependencies
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+- [react-native-screen-transitions](https://github.com/eds2002/react-native-screen-transitions) - Screen transition primitives
+- [@react-native-masked-view/masked-view](https://github.com/react-native-masked-view/masked-view) - Mask rendering
 
 ## License
 
 MIT
-
----
-
-Made with [create-library](https://github.com/example/create-library)
