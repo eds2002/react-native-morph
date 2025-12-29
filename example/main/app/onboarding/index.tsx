@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Morph } from "react-native-morph";
+import { Button } from "@/components/button";
 
 export default function OnboardingWelcome() {
 	const router = useRouter();
@@ -13,12 +14,10 @@ export default function OnboardingWelcome() {
 				<Text style={styles.description}>
 					Let&apos;s get you set up with a quick onboarding flow.
 				</Text>
-				<Pressable
-					style={styles.button}
+				<Button
+					title="Get Started"
 					onPress={() => router.push("/onboarding/steps")}
-				>
-					<Text style={styles.buttonText}>Get Started</Text>
-				</Pressable>
+				/>
 			</View>
 		</Morph.Element>
 	);
@@ -54,17 +53,5 @@ const styles = StyleSheet.create({
 		marginBottom: 24,
 		textAlign: "center",
 		lineHeight: 24,
-	},
-	button: {
-		backgroundColor: "#6366f1",
-		paddingVertical: 16,
-		paddingHorizontal: 32,
-		borderRadius: 12,
-		alignItems: "center",
-	},
-	buttonText: {
-		color: "#fff",
-		fontSize: 16,
-		fontWeight: "600",
 	},
 });

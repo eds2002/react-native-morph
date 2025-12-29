@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Morph } from "react-native-morph";
+import { Button } from "@/components/button";
 
 export default function ScreenA() {
 	const router = useRouter();
@@ -12,12 +13,10 @@ export default function ScreenA() {
 				<Text style={styles.description}>
 					First screen in the linear flow. Tap to navigate forward.
 				</Text>
-				<Pressable
-					style={styles.button}
+				<Button
+					title="Go to Screen B"
 					onPress={() => router.push("/linear/screen-b")}
-				>
-					<Text style={styles.buttonText}>Go to Screen B</Text>
-				</Pressable>
+				/>
 			</View>
 		</Morph.Element>
 	);
@@ -43,16 +42,5 @@ const styles = StyleSheet.create({
 		color: "#666",
 		marginBottom: 24,
 		lineHeight: 24,
-	},
-	button: {
-		backgroundColor: "#007AFF",
-		padding: 16,
-		borderRadius: 12,
-		alignItems: "center",
-	},
-	buttonText: {
-		color: "#fff",
-		fontSize: 16,
-		fontWeight: "600",
 	},
 });

@@ -26,16 +26,14 @@ const options = {
 
 export default function LinearLayout() {
 	return (
-		<View style={{ flex: 1, backgroundColor: "red" }}>
-			<Morph>
-				<BlankStack screenOptions={{}}>
-					<BlankStack.Screen name="index" options={options} />
-					<BlankStack.Screen name="screen-b" options={options} />
-					<BlankStack.Screen name="screen-c" options={options} />
-					<BlankStack.Screen name="screen-d" options={options} />
-					<BlankStack.Screen name="screen-e" options={options} />
-				</BlankStack>
-			</Morph>
-		</View>
+		<Morph>
+			<BlankStack screenOptions={{}}>
+				<BlankStack.Screen name="index" options={options} />
+				<BlankStack.Screen name="screen-b" options={options} />
+				<BlankStack.Screen name="screen-c" options={options} />
+				<BlankStack.Screen name="screen-d" options={options} />
+				<BlankStack.Screen name="screen-e" options={options} />
+			</BlankStack>
+		</Morph>
 	);
 }

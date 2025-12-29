@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Morph } from "react-native-morph";
+import { Button } from "@/components/button";
 
 export default function ScreenE() {
 	const router = useRouter();
@@ -15,15 +16,17 @@ export default function ScreenE() {
 					You&apos;ve reached the end of the linear flow. The morph animation
 					should work smoothly going back through all screens.
 				</Text>
-				<Pressable style={styles.button} onPress={() => router.back()}>
-					<Text style={styles.buttonText}>Go Back</Text>
-				</Pressable>
-				<Pressable
-					style={styles.buttonOutline}
+				<Button
+					title="Go Back"
+					onPress={() => router.back()}
+					style={styles.fullWidth}
+				/>
+				<Button
+					title="Dismiss All"
+					variant="secondary"
 					onPress={() => router.dismissAll()}
-				>
-					<Text style={styles.buttonOutlineText}>Dismiss All</Text>
-				</Pressable>
+					style={styles.fullWidth}
+				/>
 			</View>
 		</Morph.Element>
 	);
@@ -40,6 +43,7 @@ const styles = StyleSheet.create({
 		padding: 32,
 		alignItems: "center",
 		minHeight: 320,
+		gap: 12,
 	},
 	emoji: {
 		fontSize: 64,
@@ -60,36 +64,11 @@ const styles = StyleSheet.create({
 	description: {
 		fontSize: 16,
 		color: "#666",
-		marginBottom: 24,
+		marginBottom: 12,
 		textAlign: "center",
 		lineHeight: 24,
 	},
-	button: {
-		backgroundColor: "#007AFF",
-		paddingHorizontal: 48,
-		paddingVertical: 16,
-		borderRadius: 12,
-		marginBottom: 12,
+	fullWidth: {
 		width: "100%",
-		alignItems: "center",
-	},
-	buttonText: {
-		color: "#fff",
-		fontSize: 16,
-		fontWeight: "600",
-	},
-	buttonOutline: {
-		borderWidth: 2,
-		borderColor: "#007AFF",
-		paddingHorizontal: 48,
-		paddingVertical: 14,
-		borderRadius: 12,
-		width: "100%",
-		alignItems: "center",
-	},
-	buttonOutlineText: {
-		color: "#007AFF",
-		fontSize: 16,
-		fontWeight: "600",
 	},
 });

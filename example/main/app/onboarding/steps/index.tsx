@@ -1,5 +1,6 @@
 import { useRouter } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { Button } from "@/components/button";
 
 export default function Step1() {
 	const router = useRouter();
@@ -15,12 +16,10 @@ export default function Step1() {
 				</Text>
 			</View>
 			<View style={styles.footer}>
-				<Pressable
-					style={styles.button}
+				<Button
+					title="Next"
 					onPress={() => router.push("/onboarding/steps/step-2")}
-				>
-					<Text style={styles.buttonText}>Next</Text>
-				</Pressable>
+				/>
 			</View>
 		</View>
 	);
@@ -29,7 +28,7 @@ export default function Step1() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#6366f1",
+		backgroundColor: "#fff",
 	},
 	content: {
 		flex: 1,
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
 	},
 	stepIndicator: {
 		fontSize: 14,
-		color: "rgba(255,255,255,0.7)",
+		color: "#999",
 		marginBottom: 24,
 		fontWeight: "500",
 	},
@@ -52,11 +51,11 @@ const styles = StyleSheet.create({
 		fontWeight: "700",
 		marginBottom: 16,
 		textAlign: "center",
-		color: "#fff",
+		color: "#000",
 	},
 	description: {
 		fontSize: 18,
-		color: "rgba(255,255,255,0.8)",
+		color: "#666",
 		textAlign: "center",
 		lineHeight: 28,
 		paddingHorizontal: 24,
@@ -64,16 +63,5 @@ const styles = StyleSheet.create({
 	footer: {
 		padding: 24,
 		paddingBottom: 48,
-	},
-	button: {
-		backgroundColor: "#fff",
-		paddingVertical: 18,
-		borderRadius: 14,
-		alignItems: "center",
-	},
-	buttonText: {
-		color: "#6366f1",
-		fontSize: 18,
-		fontWeight: "600",
 	},
 });

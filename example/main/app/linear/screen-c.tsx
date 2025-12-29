@@ -1,6 +1,7 @@
 import { useRouter } from "expo-router";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { Morph } from "react-native-morph";
+import { Button } from "@/components/button";
 
 export default function ScreenC() {
 	const router = useRouter();
@@ -12,18 +13,17 @@ export default function ScreenC() {
 				<Text style={styles.title}>Screen C</Text>
 				<Text style={styles.description}>Compact centered card layout.</Text>
 				<View style={styles.buttonRow}>
-					<Pressable
-						style={styles.button}
+					<Button
+						title="Go to D"
 						onPress={() => router.push("/linear/screen-d")}
-					>
-						<Text style={styles.buttonText}>Go to D</Text>
-					</Pressable>
-					<Pressable
-						style={[styles.button, styles.buttonSecondary]}
+						style={styles.flex}
+					/>
+					<Button
+						title="Back"
+						variant="secondary"
 						onPress={() => router.back()}
-					>
-						<Text style={styles.buttonTextSecondary}>Back</Text>
-					</Pressable>
+						style={styles.flex}
+					/>
 				</View>
 			</View>
 		</Morph.Element>
@@ -60,24 +60,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		gap: 12,
 	},
-	button: {
+	flex: {
 		flex: 1,
-		backgroundColor: "#007AFF",
-		padding: 16,
-		borderRadius: 12,
-		alignItems: "center",
-	},
-	buttonSecondary: {
-		backgroundColor: "#f0f0f0",
-	},
-	buttonText: {
-		color: "#fff",
-		fontSize: 16,
-		fontWeight: "600",
-	},
-	buttonTextSecondary: {
-		color: "#333",
-		fontSize: 16,
-		fontWeight: "600",
 	},
 });

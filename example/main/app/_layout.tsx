@@ -7,6 +7,47 @@ export default function RootLayout() {
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<BlankStack screenOptions={{}}>
 				<BlankStack.Screen
+					name="linear"
+					options={{
+						gestureEnabled: true,
+						gestureDirection: "vertical",
+						screenStyleInterpolator: ({
+							layouts: {
+								screen: { height },
+							},
+							progress,
+						}) => {
+							"worklet";
+
+							const y = interpolate(progress, [0, 1], [height, 0], "clamp");
+
+							return {
+								contentStyle: {
+									transform: [{ translateY: y }],
+								},
+								overlayStyle: {
+									backgroundColor: "rgba(0, 0, 0, 0.5)",
+									opacity: interpolate(progress, [0, 1], [0, 1]),
+								},
+							};
+						},
+						transitionSpec: {
+							open: {
+								stiffness: 1000,
+								damping: 500,
+								mass: 2.5,
+								overshootClamping: true,
+							},
+							close: {
+								stiffness: 1000,
+								damping: 500,
+								mass: 2.5,
+								overshootClamping: true,
+							},
+						},
+					}}
+				/>
+				<BlankStack.Screen
 					name="onboarding"
 					options={{
 						gestureEnabled: true,
