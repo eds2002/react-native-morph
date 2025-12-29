@@ -1,10 +1,8 @@
 import Animated, { useAnimatedStyle } from "react-native-reanimated";
-import type { MorphIndicatorProps } from "../types";
+import { useMorphContext } from "../context";
 
-export function MorphIndicator({
-	targetBounds,
-	borderRadius,
-}: MorphIndicatorProps) {
+export function MorphIndicator() {
+	const { targetBounds, borderRadius } = useMorphContext();
 	const animatedStyle = useAnimatedStyle(() => {
 		"worklet";
 		const target = targetBounds.value;

@@ -12,11 +12,16 @@ export interface MaskBounds {
 export interface MorphContextValue {
 	targetBounds: SharedValue<MaskBounds>;
 	borderRadius: number;
+	backgroundColor: string;
+	scaleFactor: number;
 }
 
 export interface MorphProps {
 	children: ReactNode;
 	borderRadius?: number;
+	backgroundColor?: string;
+	scaleFactor?: number;
+	onBackdropPress?: () => void;
 }
 
 export interface MorphMaskedProps {

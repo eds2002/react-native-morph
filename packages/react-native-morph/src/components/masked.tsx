@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Animated, {
 	interpolate,
 	useAnimatedReaction,
@@ -8,13 +7,14 @@ import Animated, {
 import Transition, {
 	useHistory,
 	useScreenAnimation,
+	useScreenState,
 } from "react-native-screen-transitions";
 import { FLOATING_ELEMENT_TAG } from "../constants";
-import { MorphContext } from "../context";
+import { useMorphContext } from "../context";
 import type { MorphMaskedProps } from "../types";
 
 export function MorphMasked({ children, style }: MorphMaskedProps) {
-	const morphContext = useContext(MorphContext);
+	const { backgroundColor, scaleFactor, targetBounds } = useMorphContext();
 	const screenAnimation = useScreenAnimation();
 	const { getMostRecent } = useHistory();
 
@@ -28,10 +28,11 @@ export function MorphMasked({ children, style }: MorphMaskedProps) {
 			if (!focused) {
 				return;
 			}
-			const currentKey = current?.route?.key ?? "";
+
+			const currentKey = current?.route?.key;
 			const targetKey = previous?.route?.key ?? historyTargetKey;
 
-			if (!morphContext || !targetKey) {
+			if (!targetKey) {
 				return;
 			}
 
@@ -72,7 +73,7 @@ export function MorphMasked({ children, style }: MorphMaskedProps) {
 			);
 
 			if (height > 0 && width > 0) {
-				morphContext.targetBounds.value = {
+				targetBounds.value = {
 					height,
 					width,
 					pageX,
@@ -84,19 +85,24 @@ export function MorphMasked({ children, style }: MorphMaskedProps) {
 
 	const containerStyle = useAnimatedStyle(() => {
 		const { progress } = screenAnimation.value;
+
 		return {
 			opacity: interpolate(progress, [0.25, 0.75], [0, 1], "clamp"),
-			backgroundColor: "white",
+			backgroundColor,
 			flex: 1,
 		};
 	});
 
+	const state = useScreenState();
+	const isFirstInStack = state.index === 0;
+
 	const elementStyle = useAnimatedStyle(() => {
-		const { current, bounds } = screenAnimation.value;
+		const { current, bounds, progress } = screenAnimation.value;
+
 		const currentKey = current?.route?.key ?? "";
 
-		if (!morphContext) {
-			return { transform: [{ translateY: 0 }] };
+		if (!currentKey) {
+			return { transform: [{ translateY: 0 }, { scale: 1 }] };
 		}
 
 		const currentSnapshot = bounds.getSnapshot?.(
@@ -108,12 +114,20 @@ export function MorphMasked({ children, style }: MorphMaskedProps) {
 			return { transform: [{ translateY: 0 }] };
 		}
 
-		const maskPageY = morphContext.targetBounds.value.pageY;
+		const maskPageY = targetBounds.value.pageY;
 		const contentNaturalY = currentSnapshot.bounds.pageY;
 		const translateY = maskPageY - contentNaturalY;
 
+		const inputRange = isFirstInStack ? [1, 1, 2] : [0, 1, 2];
+
+		const outputRange = isFirstInStack
+			? [1, 1, 1 + scaleFactor]
+			: [1 - scaleFactor, 1, 1 + scaleFactor];
+
+		const scale = interpolate(progress, inputRange, outputRange, "clamp");
+
 		return {
-			transform: [{ translateY }],
+			transform: [{ translateY }, { scale }],
 		};
 	});
 
@@ -124,7 +138,7 @@ export function MorphMasked({ children, style }: MorphMaskedProps) {
 					sharedBoundTag={FLOATING_ELEMENT_TAG}
 					style={[{ marginTop: "auto" }, style]}
 				>
-					{children}
+					<View onStartShouldSetResponder={() => true}>{children}</View>
 				</Transition.View>
 			</Animated.View>
 		</Animated.View>

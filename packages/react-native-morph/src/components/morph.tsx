@@ -1,5 +1,5 @@
 import MaskedView from "@react-native-masked-view/masked-view";
-import { StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import { useSharedValue } from "react-native-reanimated";
 import { INITIAL_MASK_BOUNDS } from "../constants";
 import { MorphContext } from "../context";
@@ -8,28 +8,40 @@ import { MorphIndicator } from "./indicator";
 import { MorphMasked } from "./masked";
 
 const DEFAULT_BORDER_RADIUS = 36;
+const DEFAULT_BACKGROUND_COLOR = "white";
+const DEFAULT_SCALE_FACTOR = 0.1;
 
 function MorphRoot({
 	children,
 	borderRadius = DEFAULT_BORDER_RADIUS,
+	backgroundColor = DEFAULT_BACKGROUND_COLOR,
+	scaleFactor = DEFAULT_SCALE_FACTOR,
+	onBackdropPress,
 }: MorphProps) {
 	const targetBounds = useSharedValue<MaskBounds>(INITIAL_MASK_BOUNDS);
 
+	const content = onBackdropPress ? (
+		<Pressable style={styles.backdrop} onPress={onBackdropPress}>
+			{children}
+		</Pressable>
+	) : (
+		children
+	);
+
 	return (
-		<MorphContext.Provider value={{ targetBounds, borderRadius }}>
+		<MorphContext.Provider
+			value={{ targetBounds, borderRadius, backgroundColor, scaleFactor }}
+		>
 			<MaskedView
 				style={styles.container}
 				maskElement={
 					<View style={StyleSheet.absoluteFillObject} pointerEvents="none">
-						<MorphIndicator
-							targetBounds={targetBounds}
-							borderRadius={borderRadius}
-						/>
+						<MorphIndicator />
 					</View>
 				}
 				pointerEvents="box-none"
 			>
-				{children}
+				{content}
 			</MaskedView>
 		</MorphContext.Provider>
 	);
@@ -41,6 +53,9 @@ export const Morph = Object.assign(MorphRoot, {
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
+	},
+	backdrop: {
 		flex: 1,
 	},
 });

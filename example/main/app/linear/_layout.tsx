@@ -1,4 +1,5 @@
 import "react-native-reanimated";
+import { router } from "expo-router";
 import { Morph } from "react-native-morph";
 import { BlankStack } from "@/layouts/blank-stack";
 
@@ -25,7 +26,7 @@ const options = {
 
 export default function LinearLayout() {
 	return (
-		<Morph>
+		<Morph onBackdropPress={router.back}>
 			<BlankStack screenOptions={{}}>
 				<BlankStack.Screen name="index" options={options} />
 				<BlankStack.Screen name="screen-b" options={options} />
