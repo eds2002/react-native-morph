@@ -24,7 +24,8 @@
 	"scripts": {
 		"build": "bob build",
 		"lint": "biome check ./src",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"release": "release-it"
 	},
 	"keywords": [
 		"react-native"
@@ -64,5 +65,27 @@
 				}
 			]
 		]
+	},
+	"release-it": {
+		"git": {
+			"commitMessage": "chore: release ${version}",
+			"tagName": "v${version}",
+			"commitArgs": ["-n"]
+		},
+		"npm": {
+			"publish": true
+		},
+		"github": {
+			"release": true,
+			"skipChecks": true
+		},
+		"plugins": {
+			"@release-it/conventional-changelog": {
+				"preset": {
+					"name": "angular"
+				},
+				"path": "."
+			}
+		}
 	}
 }
