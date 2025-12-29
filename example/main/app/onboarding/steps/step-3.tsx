@@ -10,9 +10,9 @@ export default function Step3() {
 			<View style={styles.content}>
 				<Text style={styles.stepIndicator}>Step 3 of 3</Text>
 				<Text style={styles.emoji}>🚀</Text>
-				<Text style={styles.title}>You're All Set!</Text>
+				<Text style={styles.title}>You&apos;re All Set!</Text>
 				<Text style={styles.description}>
-					Everything is configured. Let's launch your experience.
+					Everything is configured. Let&apos;s launch your experience.
 				</Text>
 			</View>
 			<View style={styles.footer}>

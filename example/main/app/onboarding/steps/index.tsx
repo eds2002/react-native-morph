@@ -12,7 +12,7 @@ export default function Step1() {
 				<Text style={styles.emoji}>🎯</Text>
 				<Text style={styles.title}>Set Your Goals</Text>
 				<Text style={styles.description}>
-					Tell us what you want to achieve. We'll help you get there.
+					Tell us what you want to achieve. We&aposll help you get there.
 				</Text>
 			</View>
 			<View style={styles.footer}>

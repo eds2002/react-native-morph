@@ -4,8 +4,6 @@ import { Morph } from "react-native-morph";
 import { BlankStack } from "@/layouts/blank-stack";
 
 const options = {
-	gestureEnabled: true,
-	gestureDirection: "vertical",
 	transitionSpec: {
 		open: {
 			stiffness: 1000,
