@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import Animated, {
 	interpolate,
 	useAnimatedReaction,
@@ -137,8 +137,9 @@ export function MorphScreen({ children, style }: MorphScreenProps) {
 				<Transition.View
 					sharedBoundTag={FLOATING_ELEMENT_TAG}
 					style={[{ marginTop: "auto" }, style]}
+					onStartShouldSetResponder={() => true}
 				>
-					<View onStartShouldSetResponder={() => true}>{children}</View>
+					{children}
 				</Transition.View>
 			</Animated.View>
 		</Animated.View>
